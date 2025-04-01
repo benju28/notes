@@ -1,0 +1,65 @@
+Q1
+data("BJsales")
+print(BJsales)
+plot(BJsales,main="BJsales Time Series",ylab="Sales",xlab="Month",col="orange")
+time<-1:length(BJsales)
+trend_fit<-lm(BJsales~poly(time,2))
+plot(BJsales,main="BJsales with Polynomial Trend",ylab="Sales",xlab="Month",col="orange")
+lines(time,predict(trend_fit),col="green",lwd=2)
+residuals<-BJsales-predict(trend_fit)
+#D
+diff_BJsales<-diff(BJsales)
+plot(diff_BJsales,main="Differenced BJsales",ylab="Differenced Sales",xlab="Month",col="blue")
+library(tseries)
+adf.test(diff_BJsales)
+#E
+par(mfrow=c(1,2))
+acf(diff_BJsales,main="ACF of Differenced BJsales")
+pacf(diff_BJsales,main="PACF of Differenced BJsales")
+#F
+library(forecast)
+fit<-auto.arima(BJsales)
+summary(fit)
+#G
+residuals<-residuals(fit)
+par(mfrow=c(1,2))
+plot(residuals,main="Residuals of Fitted Model",ylab="Residuals",xlab="Month",col="blue")
+acf(residuals,main="ACF of Residuals")
+#H
+forecast_values<-forecast(fit,h=10)
+plot(forecast_values,main="10-step Forcast for BJsales",ylab="Sales",xlab="Month")
+#i
+plot(BJsales,main="Actual vs Predicted BJsales",ylab="Sales",xlab="Month",col="blue")
+lines(forecast_values$mean,col="red",lwd=2)
+
+
+Q2
+data("co2")
+print(co2)
+#b
+plot(co2,main="co2 Time Series",ylab="Month",xlab="Year",col="purple")
+#c
+diff_trend<-diff(co2,differences = 1)
+diff_seasonal<-diff(diff_trend,lag=12)
+plot(diff_seasonal,main="Differenced Series(Stationary",ylab="Differenced CO2",xlab="Time",col="green",type="o")
+library(tseries)
+adf.test(diff_seasonal)
+#d
+par(mfrow=c(1,2))
+acf(diff_seasonal,main="ACF of Stationary Series")
+pacf(diff_seasonal,main="PACF of Stationary Series")
+#e
+library(forecast)
+fit<-auto.arima(co2)
+summary(fit)
+#f
+residuals<-residuals(fit)
+par(mfrow=c(1,2))
+plot(residuals,main="Residuals of Fitted Model",ylab="Month",xlab="Year",col="blue")
+acf(residuals,main="ACF of Residuals")
+#g
+forecast_values<-forecast(fit,h=12)
+plot(forecast_values,main="12-step Forcast for co2",ylab="Month",xlab="Year")
+#h
+plot(co2,main="Actual vs Predicted co2",ylab="Month",xlab="Year",col="purple")
+lines(forecast_values$mean,col="red",lwd=2)
