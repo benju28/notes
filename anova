@@ -1,0 +1,51 @@
+BIBD
+rm(list=ls())
+b=10
+k=3
+block=factor(rep(1:b,times=k))
+treat=factor(c(1,1,1,2,3,1,1,1,2,2,2,2,4,3,4,2,3,3,3,4,3,5,5,4,5,4,4,5,5,5))
+length(treat)
+y=c(7.5,6.6,5.4,6.6,7.5,7.6,6.5,8,7.2,8.3,6.4,6,7.8,7,8.7,6.9,8.2,7.7,8.4,7,7.6,7.8,8.7,7.3,8.7,6.8,7.6,7.2,8.3,8.7)
+dat=data.frame(block,treat,y);dat
+N=xtabs(~treat+block,data = dat);N
+lambda=(6*(3-1))/(5-1)
+print(lambda)
+myfit=lm(y~treat+block,dat)
+myfit
+anova(myfit)
+
+#q1
+x=factor(rep(c("T1","T4","T5","T4","T3","T2","T2","T3","T1","T5","T3","T1","T5","T1","T4","T4","T5","T2","T5","T3","T5","T1","T3","T4","T2","T2","T3","T4","T2","T1")))
+y=c(310,320,397,359,349,369,454,416,421,359,401,343,333,330,357,369,341,365,321,326,431,357, 377,394,327,382,274,374,307,401)
+crd=aov(y~x)
+summary(crd)
+
+
+#q2
+block=factor(rep(1:4, each = 6))
+treatment=factor(rep(1:6,times=4))
+yield=c(24.7,27.3,38.5,28.5,20.6, 28.8, 39.5, 31.0,27.7, 22.7, 36.8, 34.9,16.2, 15.0, 19.6, 14.1,16.2, 17.0, 15.4, 14.1,24.9, 22.5, 26.3, 22.6)
+rbd=aov(yield~block+treatment)
+summary(rbd)
+length(yield)
+
+
+#q3
+f=factor(rep(1:5, each = 5))
+LC=factor(rep(1:5, times=5))               
+x=factor(c("A","A","A","A","A", "B","B","B","B","B", "C","C","C","C","C", "D","D","D","D","D", "E","E","E","E","E"))
+y=c(42, 44, 46, 43, 45, 55, 54, 48, 56, 54, 47, 52, 41, 50, 46, 51, 50, 57, 52, 47, 44, 45, 47, 49, 49)
+lsd=aov(y~f+LC+x)
+summary(lsd)
+
+
+#q4 Ancova
+pre_test <- c(94, 96, 98, 100, 102, 105, 109, 110, 111, 130, 80, 84, 90, 97, 97, 112, 115, 118, 120, 120, 92, 96, 99, 101, 102, 104, 107, 110, 110, 118, 94, 94, 98, 100, 103, 104, 108, 113, 115, 104)
+post_test <- c(14, 19, 17, 38, 40, 26, 41, 28, 36, 66, 38, 34, 43, 43, 61, 63, 93, 74, 76, 79, 55, 53, 55, 52, 35, 46, 34, 55, 42, 81, 37, 24, 22, 43, 49, 41, 26, 70, 63, 24)
+methods =factor(rep(1:4, each = 10)) #methods (I, II, III, IV)
+blocks=factor(rep(1:10,times=4))
+data=data.frame(blocks,methods,pre_test,post_test)
+data
+ancova_model <- aov(post_test ~ pre_test+methods+blocks, data = data)
+summary(ancova_model)
+
